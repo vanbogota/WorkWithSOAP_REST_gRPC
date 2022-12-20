@@ -97,7 +97,7 @@ namespace PumpService
                 return;
             }
 
-            MethodInfo entryPointMethod = type.GetMethod("EntryPoint");
+            MethodInfo entryPointMethod = type.GetMethod("EnteryPoint");
             if (entryPointMethod == null)
             {
                 return;
