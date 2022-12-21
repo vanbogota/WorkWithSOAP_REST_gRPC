@@ -1,0 +1,148 @@
+syntax = "proto3";
+
+option csharp_namespace = "ClinicServiceNamespace";
+
+//полезная ссылочка https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/wrappers.proto
+
+import "google/protobuf/wrappers.proto";
+
+service ClinicService{
+	rpc CreateClient (CreateClientRequest) returns (CreateClientResponse);
+	rpc UpdateClient (UpdateClientRequest) returns (UpdateClientResponse);
+	rpc DeleteClient (DeleteClientRequest) returns (DeleteClientResponse);
+	rpc GetClientById (GetClientByIdRequest) returns (GetClientByIdResponse);
+	rpc GetClients (GetClientsRequest) returns (GetClientsResponse);
+
+	rpc CreatePet (CreatePetRequest) returns (CreatePetResponse);
+	rpc UpdatePet (UpdatePetRequest) returns (UpdatePetResponse);
+	rpc DeletePet (DeletePetRequest) returns (DeletePetResponse);
+	rpc GetPetById (GetPetByIdRequest) returns (GetPetByIdResponse);
+	rpc GetPets (GetPetsRequest) returns (GetPetsResponse);
+
+	rpc CreateConsultation (CreateConsultationRequest) returns (CreateConsultationResponse);
+	rpc UpdateConsultation (UpdateConsultationRequest) returns (UpdateConsultationResponse);
+	rpc DeleteConsultation (DeleteConsultationRequest) returns (DeleteConsultationResponse);
+	rpc GetConsultationById (GetConsultationByIdRequest) returns (GetConsultationByIdResponse);
+	rpc GetConsultations (GetConsultationsRequest) returns (GetConsultationsResponse);
+}
+
+message CreateClientRequest{
+	string document = 1;
+	string surname = 2;
+	string firstname = 3;
+	string patronymic = 4;
+}
+
+message CreateClientResponse{
+	google.protobuf.Int32Value clientId = 1;
+	int32 errorCode = 2;
+	string errorMessage = 3;
+}
+
+message UpdateClientRequest{
+	int32 clientId = 1;
+	string document = 2;
+	string surname = 3;
+	string firstname = 4;
+	string patronymic = 5;
+}
+
+message UpdateClientResponse{
+	int32 errorCode = 1;
+	string errorMessage = 2;
+}
+
+message DeleteClientRequest{
+	int32 clientId = 1;
+}
+
+message DeleteClientResponse{
+	int32 errorCode = 1;
+	string errorMessage = 2;
+}
+
+message GetClientByIdRequest{
+	int32 clientId = 1;
+}
+
+message GetClientByIdResponse{
+	ClientResponse client = 1;
+	int32 errorCode = 2;
+	string errorMessage = 3;
+}
+
+message ClientResponse{
+	int32 clientId = 1;
+	string document = 2;
+	string surname = 3;
+	string firstname = 4;
+	string patronymic = 5;
+}
+
+message GetClientsRequest{
+
+}
+
+message GetClientsResponse{
+	repeated ClientResponse clients = 1;
+	int32 errorCode = 2;
+	string errorMessage = 3;
+}
+
+message CreatePetRequest{
+	string name = 1;
+	string birthday =2;
+}
+
+message CreatePetResponse{
+	google.protobuf.Int32Value petId = 1;
+	int32 errorCode = 2;
+	string errorMessage = 3;
+}
+
+message UpdatePetRequest{
+	int32 petId = 1;
+	string name = 2;
+	string birthday = 3;
+}
+
+message UpdatePetResponse{
+	int32 errorCode = 1;
+	string errorMessage = 2;
+}
+
+message DeletePetRequest{
+	int32 petId = 1;
+}
+
+message DeletePetResponse{
+	int32 errorCode = 1;
+	string errorMessage = 2;
+}
+
+message GetPetByIdRequest{
+	int32 petId = 1;
+}
+
+message GetPetByIdResponse{
+	PetResponse pet = 1;
+	int32 errorCode = 2;
+	string errorMessage = 3;
+}
+
+message PetResponse{
+	int32 petId = 1;
+	string name = 2;
+	string birthday = 3;
+	
+}
+
+message GetPetsRequest{
+
+}
+
+message GetPetsResponse{
+	repeated PetResponse pets = 1;
+	int32 errorCode = 2;
+	string errorMessage = 3;
+}
