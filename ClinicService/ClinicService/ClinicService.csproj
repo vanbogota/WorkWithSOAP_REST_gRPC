@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <None Remove="Proto\clinic.proto" />
+    <None Remove="Proto\clinicConsultation.proto" />
+    <None Remove="Proto\clinicPet.proto" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +31,8 @@
 
   <ItemGroup>
     <Protobuf Include="Proto\clinic.proto" GrpcServices="Server" />
+    <Protobuf Include="Proto\clinicConsultation.proto" GrpcServices="Server" />
+    <Protobuf Include="Proto\clinicPet.proto" GrpcServices="Server" />
   </ItemGroup>
 
 </Project>

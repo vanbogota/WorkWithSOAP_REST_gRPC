@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+option csharp_namespace = "ClinicServiceNamespace";
+
+import "google/protobuf/wrappers.proto";
+
+service ClinicPetService{
+	rpc CreatePet (CreatePetRequest) returns (CreatePetResponse);
+	rpc UpdatePet (UpdatePetRequest) returns (UpdatePetResponse);
+	rpc DeletePet (DeletePetRequest) returns (DeletePetResponse);
+	rpc GetPetById (GetPetByIdRequest) returns (GetPetByIdResponse);
+	rpc GetPets (GetPetsRequest) returns (GetPetsResponse);
+}
+
+message CreatePetRequest{
+	int32 clientId =1;
+	string name = 2;
+	string birthday = 3;
+}
+
+message CreatePetResponse{
+	google.protobuf.Int32Value petId = 1;
+	int32 errorCode = 2;
+	string errorMessage = 3;
+}
+
+message UpdatePetRequest{
+	int32 petId = 1;
+	string name = 2;
+	string birthday = 3;
+}
+
+message UpdatePetResponse{
+	int32 errorCode = 1;
+	string errorMessage = 2;
+}
+
+message DeletePetRequest{
+	int32 petId = 1;
+}
+
+message DeletePetResponse{
+	int32 errorCode = 1;
+	string errorMessage = 2;
+}
+
+message GetPetByIdRequest{
+	int32 petId = 1;
+}
+
+message GetPetByIdResponse{
+	PetResponse pet = 1;
+	int32 errorCode = 2;
+	string errorMessage = 3;
+}
+
+message PetResponse{
+	int32 petId = 1;
+	int32 clientId =2;
+	string name = 3;
+	string birthday = 4;
+	
+}
+
+message GetPetsRequest{
+
+}
+
+message GetPetsResponse{
+	repeated PetResponse pets = 1;
+	int32 errorCode = 2;
+	string errorMessage = 3;
+}
