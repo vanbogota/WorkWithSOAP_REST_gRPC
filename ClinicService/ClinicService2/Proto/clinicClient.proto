@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+option csharp_namespace = "ClinicService2Namespace";
+
+//полезная ссылочка https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/wrappers.proto
+
+import "google/protobuf/wrappers.proto";
+
+// https://learn.microsoft.com/ru-ru/aspnet/core/grpc/json-transcoding?view=aspnetcore-7.0&viewFallbackFrom=aspnetcore-6.0
+// https://github.com/dotnet/aspnetcore/blob/main/src/Grpc/JsonTranscoding/test/testassets/Sandbox/google/api/http.proto
+
+import "google/api/annotations.proto";
+
+package proto;
+
+//Service for creating clients in the clinic
+service ClinicService{
+	//Creates new client
+	rpc CreateClient (CreateClientRequest) returns (CreateClientResponse);
+	//Updates existing client
+	rpc UpdateClient (UpdateClientRequest) returns (UpdateClientResponse);
+	//Delete client by id
+	rpc DeleteClient (DeleteClientRequest) returns (DeleteClientResponse){
+
+	};
+	//Get client by his Id
+	rpc GetClientById (GetClientByIdRequest) returns (GetClientByIdResponse){
+		option (google.api.http) = {
+            post: "/api/clientById",
+			body: "*",
+			response_body: "client"
+        };
+	};
+	//Get all registered clinets in clinic
+	rpc GetClients (GetClientsRequest) returns (GetClientsResponse){
+		option (google.api.http) = {
+            get: "/api/clients"
+        };
+	};	
+}
+
+//Methods to work with clinic client
+message CreateClientRequest{
+	//Documents of client
+	string document = 1;
+	string surname = 2;
+	string firstname = 3;
+	string patronymic = 4;
+}
+
+message CreateClientResponse{
+	google.protobuf.Int32Value clientId = 1;
+	int32 errorCode = 2;
+	string errorMessage = 3;
+}
+
+message UpdateClientRequest{
+	int32 clientId = 1;
+	string document = 2;
+	string surname = 3;
+	string firstname = 4;
+	string patronymic = 5;
+}
+
+message UpdateClientResponse{
+	int32 errorCode = 1;
+	string errorMessage = 2;
+}
+
+message DeleteClientRequest{
+	int32 clientId = 1;
+}
+
+message DeleteClientResponse{
+	int32 errorCode = 1;
+	string errorMessage = 2;
+}
+
+message GetClientByIdRequest{
+	int32 clientId = 1;
+}
+
+message GetClientByIdResponse{
+	ClientResponse client = 1;
+	int32 errorCode = 2;
+	string errorMessage = 3;
+}
+
+message ClientResponse{
+	int32 clientId = 1;
+	string document = 2;
+	string surname = 3;
+	string firstname = 4;
+	string patronymic = 5;
+}
+
+message GetClientsRequest{
+
+}
+
+message GetClientsResponse{
+	repeated ClientResponse clients = 1;
+	int32 errorCode = 2;
+	string errorMessage = 3;
+}
