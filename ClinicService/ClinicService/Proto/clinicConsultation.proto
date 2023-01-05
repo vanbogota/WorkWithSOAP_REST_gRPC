@@ -2,6 +2,8 @@ syntax = "proto3";
 
 option csharp_namespace = "ClinicServiceNamespace";
 
+package ClinicServiceProtos;
+
 import "google/protobuf/wrappers.proto";
 
 service ClinicConsultationService{
