@@ -1,17 +1,21 @@
 ﻿using ClinicService.Data;
 using ClinicServiceNamespace;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using static ClinicServiceNamespace.ClinicService;
 
 namespace ClinicService.Services.Impl
 {
+    [Authorize]
     public class ClinicService : ClinicServiceBase
     {
         private readonly ClinicServiceDbContext _dbContext;
+        private readonly ILogger<ClinicService> _logger;
 
-        public ClinicService(ClinicServiceDbContext dbContext)
+        public ClinicService(ClinicServiceDbContext dbContext, ILogger<ClinicService> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
         public override Task<CreateClientResponse> CreateClient(CreateClientRequest request, ServerCallContext context)
         {

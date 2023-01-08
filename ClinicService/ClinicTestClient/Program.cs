@@ -1,5 +1,7 @@
 ﻿using ClinicServiceNamespace;
+using Grpc.Core;
 using Grpc.Net.Client;
+using static ClinicServiceNamespace.AuthenticateService;
 using static ClinicServiceNamespace.ClinicConsultationService;
 using static ClinicServiceNamespace.ClinicPetService;
 using static ClinicServiceNamespace.ClinicService;
@@ -10,16 +12,45 @@ namespace ClinicTestClient
     {
         static void Main(string[] args)
         {
-            AppContext.SetSwitch(
-                "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+            //AppContext.SetSwitch(
+            //    "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
-            using var channel = GrpcChannel.ForAddress("http://localhost:5001");
+            using var channel = GrpcChannel.ForAddress("https://localhost:5001");
 
-            ClinicServiceClient clinicServiceClient = new ClinicServiceClient(channel);
+            AuthenticateServiceClient authServiceClient = new AuthenticateServiceClient(channel);
 
-            ClinicConsultationServiceClient consultServiceClient = new ClinicConsultationServiceClient(channel);
+            var authResponse = authServiceClient.Login(new AuthenticationRequestGRPC
+            {
+                UserName = "test@test.ru",
+                Password= "12345"
+            });
 
-            ClinicPetServiceClient petServiceClient = new ClinicPetServiceClient(channel);
+            if (authResponse.Status != 0)
+            {
+                Console.WriteLine("Auhentication error");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.WriteLine($"Session token: {authResponse.SessionContext.SessionToken}");
+            Console.WriteLine();
+
+            var credential = CallCredentials.FromInterceptor((c,m) =>
+            {
+                m.Add("Authorization", $"Bearer {authResponse.SessionContext.SessionToken}");
+                return Task.CompletedTask;
+            });
+
+            var protectedChannel = GrpcChannel.ForAddress("https://localhost:5001", new GrpcChannelOptions
+            {
+                Credentials = ChannelCredentials.Create(new SslCredentials(), credential)
+            });
+
+            ClinicServiceClient clinicServiceClient = new ClinicServiceClient(protectedChannel);
+
+            ClinicConsultationServiceClient consultServiceClient = new ClinicConsultationServiceClient(protectedChannel);
+
+            ClinicPetServiceClient petServiceClient = new ClinicPetServiceClient(protectedChannel);
 
             //testing client creation
 

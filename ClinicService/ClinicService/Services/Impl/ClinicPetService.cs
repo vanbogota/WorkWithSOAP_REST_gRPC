@@ -1,17 +1,21 @@
 ﻿using ClinicService.Data;
 using ClinicServiceNamespace;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using static ClinicServiceNamespace.ClinicPetService;
 
 namespace ClinicService.Services.Impl
 {
+    [Authorize]
     public class ClinicPetService : ClinicPetServiceBase
     {
         private readonly ClinicServiceDbContext _dbContext;
+        private readonly ILogger<ClinicPetService> _logger;
 
-        public ClinicPetService(ClinicServiceDbContext dbContext)
+        public ClinicPetService(ClinicServiceDbContext dbContext, ILogger<ClinicPetService> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         public override Task<CreatePetResponse> CreatePet(CreatePetRequest request, ServerCallContext context)
