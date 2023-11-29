@@ -1,2 +1,2 @@
-# WorkWithSOAP_REST_gRPC
-Several services with using SOAP, REST and gRPC
+# About
+Several services for personal use and skill development with SOAP, REST and gRPC. Uploaded solely for showcasing my code in presentations. 
